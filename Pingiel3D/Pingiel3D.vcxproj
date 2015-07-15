@@ -64,6 +64,16 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Pingiel.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="Pingiel3D.rc" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Pingiel3D.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="pliki\ikona.ico" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
