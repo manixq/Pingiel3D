@@ -18,6 +18,9 @@
     <ClCompile Include="Pingiel.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="funkcje.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Pingiel3D.rc">
@@ -31,6 +34,9 @@
   </ItemGroup>
   <ItemGroup>
     <Image Include="pliki\ikona.ico">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="pliki\tex.bmp">
       <Filter>Resource Files</Filter>
     </Image>
   </ItemGroup>

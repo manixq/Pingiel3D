@@ -64,6 +64,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="funkcje.cpp" />
     <ClCompile Include="Pingiel.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -74,6 +75,7 @@
   </ItemGroup>
   <ItemGroup>
     <Image Include="pliki\ikona.ico" />
+    <Image Include="pliki\tex.bmp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
