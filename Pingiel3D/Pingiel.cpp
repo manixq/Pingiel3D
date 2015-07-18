@@ -1,15 +1,6 @@
-#define _CRT_SECURE_NO_DEPRECATE//bez tego blad fopen
-#include <Windows.h>
-#include <gl\GL.h>
-#include <gl\GLU.h>
-#include <gl\GLAux.h>
-#include <stdio.h>
-#pragma comment(lib,"opengl32.lib")
-#pragma comment(lib,"glu32.lib")
-#pragma comment(lib,"glaux.lib")
 #include "Pingiel3D.h"
 
-GLuint texture[3];
+GLuint texture[1];
 GLfloat LightAmbient[] = { 0.5f, 0.5f, 0.5f, 1.0f };
 GLfloat LightDiffuse[] = { 1.0f, 1.0f, 1.0f, 1.0f };
 GLfloat LightPosition[] = { 0.0f, 0.0f, 2.0f, 1.0f };
@@ -36,11 +27,11 @@ int LoadGLTexture()
 	if (TextureImage[0] = LoadBMP("pliki/tex.bmp"))
 	{
 		Status = true;
-		glGenTextures(3, &texture[0]);
+		glGenTextures(1, &texture[0]);
 		glBindTexture(GL_TEXTURE_2D, texture[0]);
 		glTexImage2D(GL_TEXTURE_2D, 0, 3, TextureImage[0]->sizeX, TextureImage[0]->sizeY, 0, GL_RGB, GL_UNSIGNED_BYTE, TextureImage[0]->data);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);//filtrowanie liniowe
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);//filtrowanie liniowe
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);//filtrowanie liniowe
 	}
 	if (TextureImage[0])
 	{
@@ -60,18 +51,21 @@ int InitGL(GLvoid)                              // All Setup For OpenGL Goes Her
 	{
 		return FALSE;                           // If Texture Didn't Load Return FALSE ( NEW )
 	}
+	
 	glEnable(GL_TEXTURE_2D);                        // Enable Texture Mapping ( NEW )
 	glShadeModel(GL_SMOOTH);                        // Enable Smooth Shading
 	glClearColor(0.0f, 0.0f, 0.0f, 0.5f);                   // Black Background
 	glClearDepth(1.0f);                         // Depth Buffer Setup
-	//glEnable(GL_DEPTH_TEST);                        // Enables Depth Testing
+	glEnable(GL_DEPTH_TEST);                        // Enables Depth Testing
 	glDepthFunc(GL_LEQUAL);                         // The Type Of Depth Testing To Do
 	glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST);          // Really Nice Perspective Calculations
+	                              // Initialization Went OK
 	glLightfv(GL_LIGHT1, GL_AMBIENT, LightAmbient);
 	glLightfv(GL_LIGHT1, GL_DIFFUSE, LightDiffuse);
 	glLightfv(GL_LIGHT1, GL_POSITION, LightPosition);
 	glEnable(GL_LIGHT1);
 	glEnable(GL_LIGHTING);
+	
 	return TRUE;                                // Initialization Went OK
 }
 
@@ -84,7 +78,7 @@ GLvoid ReSizeGLScene(GLsizei width, GLsizei height)
 	glMatrixMode(GL_PROJECTION);//ust. macierzy projekcji
 	glLoadIdentity();//reset m. proj.
 
-	gluPerspective(45.0f,(GLfloat)width / (GLfloat)height, 0.1f, 1000.0f);
+	gluPerspective(60.0f,(GLfloat)width / (GLfloat)height, 0.1f, 1000.0f);
 
 	glMatrixMode(GL_MODELVIEW);//macierz modelu
 	glLoadIdentity();//reset macierzy modelu
@@ -122,25 +116,12 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam)
 
 int DrawGLScene(GLvoid)
 {
-	static GLfloat rot = 0.0;
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);//wyzerowanie bufora kolorow i glebokosci
-	
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);//wyzerowanie bufora kolorow i glebokosci	
 	glLoadIdentity();
 	
-	glTranslatef(0, 0, -25);
+	glTranslatef(0, 0, -250);
 	glBindTexture(GL_TEXTURE_2D, texture[0]);
-	glBegin(GL_QUADS);
-	glNormal3d(0, -1, 0);//wektor normalny
-	glTexCoord2f(1.0f, 1.0f);
-	glVertex3d(8, 6, 3);
-	glTexCoord2f(0.0f, 1.0f);
-	glVertex3d(0, 6, 3);
-	glTexCoord2f(1.0f, 0.0f);
-	glVertex3d(5, 0, 0);
-	glTexCoord2f(0.0f, 0.0f);
-	glVertex3d(-10, 0, 0);
-	glEnd();
-	
+	rysuj();
 	return 1;
 }
 
