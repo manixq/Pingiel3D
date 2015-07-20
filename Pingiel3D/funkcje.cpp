@@ -1,29 +1,28 @@
 #include "Pingiel3D.h"
-
-void rysuj()
+struct player
 {
-	static GLfloat rot = 0.0;
-	glRotatef(rot++, 1, 1, 0.0f);
-	glBegin(GL_TRIANGLE_STRIP);
-		glTexCoord2d(1, 1);	glVertex3d(50, 0, 50);
-		glTexCoord2d(0, 1);	glVertex3d(0, 0, 50);
-		glTexCoord2d(1, 0);	glVertex3d(50, 0, 0);
-		glTexCoord2d(0, 0);	glVertex3d(0, 0, 0);
-		glTexCoord2d(0, 0);	glVertex3d(0, 0, 0);
-		glTexCoord2d(0, 1); glVertex3d(0, 50, 0);
-		glTexCoord2d(1, 0); glVertex3d(50, 0, 0);
-		glTexCoord2d(1, 1); glVertex3d(50, 50, 0);
-		glTexCoord2d(0, 0);	glVertex3d(50, 0, 50);
-		glTexCoord2d(0, 1); glVertex3d(50, 50, 50);
-		glTexCoord2d(1, 0); glVertex3d(0, 0, 50);
-		glTexCoord2d(1, 1); glVertex3d(0, 50, 50);
-		glTexCoord2d(0, 0);	glVertex3d(0, 0, 0);
-		glTexCoord2d(0, 1); glVertex3d(0, 50, 0);
-		glTexCoord2d(0, 1); glVertex3d(0, 50, 0);
-		glTexCoord2d(1, 1); glVertex3d(50, 50, 0);
-		glTexCoord2d(0, 0);	glVertex3d(0, 50, 50);
-		glTexCoord2d(1, 0); glVertex3d(50, 50, 50);
-		
-	glEnd();
-	
+	float x, z;
+	float oX;
+};
+
+struct rect
+{	
+	float x=50, y=0,z=250;
+	float width=100,height=500,bottom=0;
+};
+void setFog()
+{
+	static float fogColor[] = {0.0f, 0.0f, 0.0f, 1.0f};
+	static float fogDensity = 0.002f;
+	glFogi(GL_FOG_MODE, GL_EXP);//zalezy od fogdensity f=e^(-density*z)
+	glFogf(GL_FOG_DENSITY, fogDensity);
+	glFogfv(GL_FOG_COLOR, fogColor);
+
+}
+void rysuj()
+{	
+	static int x = 0;
+	glRotatef(x++, 0, 1, 0);
+	plansza();
+	gracz(5,5,5);
 }

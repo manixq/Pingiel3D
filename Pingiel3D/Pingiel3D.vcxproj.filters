@@ -21,6 +21,9 @@
     <ClCompile Include="funkcje.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Obiekty.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Pingiel3D.rc">

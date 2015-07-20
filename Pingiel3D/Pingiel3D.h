@@ -13,3 +13,6 @@
 #pragma comment(lib,"glu32.lib")
 #pragma comment(lib,"glaux.lib")
 void rysuj();
+void setFog();
+void plansza();
+void gracz(int x, int y, int z);

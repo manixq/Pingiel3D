@@ -65,6 +65,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="funkcje.cpp" />
+    <ClCompile Include="Obiekty.cpp" />
     <ClCompile Include="Pingiel.cpp" />
   </ItemGroup>
   <ItemGroup>
