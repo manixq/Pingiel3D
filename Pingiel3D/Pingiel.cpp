@@ -1,10 +1,11 @@
 #include "Pingiel3D.h"
-
+bool keys[256];
 GLuint texture[1];
 GLfloat LightAmbient[] = { 0.5f, 0.5f, 0.5f, 1.0f };
 GLfloat LightDiffuse[] = { 1.0f, 1.0f, 1.0f, 1.0f };
 GLfloat LightPosition[] = { 0.0f, 0.0f, 2.0f, 1.0f };
-bool keys[256];
+
+
 
 AUX_RGBImageRec *LoadBMP(char* Filename)//teksturki
 {
@@ -110,6 +111,12 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam)
 	case WM_SIZE:
 		ReSizeGLScene(LOWORD(lParam), HIWORD(lParam));
 		break;
+	case WM_KEYDOWN:
+		keys[wParam] = TRUE;
+		break;
+	case WM_KEYUP:
+		keys[wParam] = FALSE;
+		break;
 	case WM_DESTROY:PostQuitMessage(0);
 		break;
 	}
@@ -126,6 +133,7 @@ int DrawGLScene(GLvoid)
 	glTranslatef(-40, -20, -500);
 
 	glBindTexture(GL_TEXTURE_2D, texture[0]);
+	
 	rysuj();
 	return 1;
 }

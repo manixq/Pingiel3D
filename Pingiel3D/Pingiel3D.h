@@ -12,6 +12,8 @@
 #pragma comment(lib,"opengl32.lib")
 #pragma comment(lib,"glu32.lib")
 #pragma comment(lib,"glaux.lib")
+
+bool keys[];
 void rysuj();
 void setFog();
 void plansza();
