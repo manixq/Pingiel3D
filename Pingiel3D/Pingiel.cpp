@@ -1,21 +1,24 @@
 #include "Pingiel3D.h"
+#include <String>
+
+
 bool keys[256];
-GLuint texture[1];
-GLfloat LightAmbient[] = { 0.5f, 0.5f, 0.5f, 1.0f };
-GLfloat LightDiffuse[] = { 1.0f, 1.0f, 1.0f, 1.0f };
-GLfloat LightPosition[] = { 0.0f, 0.0f, 2.0f, 1.0f };
+GLuint texture[3];
+static GLUquadricObj *quadric=NULL;
 
+GLuint* wyslij()
+{
+	return texture;
+}
 
-
-AUX_RGBImageRec *LoadBMP(char* Filename)//teksturki
+AUX_RGBImageRec *LoadBMP(std::string Filename)//teksturki
 {
 	FILE *File = NULL;
-	if (!Filename) return NULL;
-	File = fopen(Filename, "r");//sprawdz czy istnieje
+	File = fopen(Filename.c_str(), "r");//sprawdz czy istnieje
 	if (File)
 	{
 		fclose(File);
-		return auxDIBImageLoad(Filename);
+		return auxDIBImageLoad(Filename.c_str());
 	}
 	return NULL;
 }
@@ -23,24 +26,28 @@ AUX_RGBImageRec *LoadBMP(char* Filename)//teksturki
 int LoadGLTexture()
 {
 	int Status = FALSE;
-	AUX_RGBImageRec *TextureImage[1];//rezerwujemy miejsce na teksture
+	std::string tab[3] = { "pliki/tex.bmp", "pliki/tex2.bmp","pliki/tex3.bmp"};
+	AUX_RGBImageRec *TextureImage[3];//rezerwujemy miejsce na teksture
 	memset(TextureImage, 0, sizeof(void*) * 1); //ustawiamy na 0
-	if (TextureImage[0] = LoadBMP("pliki/tex.bmp"))
+	for (int i = 0; i < 3; i++)
 	{
-		Status = true;
-		glGenTextures(3, &texture[0]);
-		glBindTexture(GL_TEXTURE_2D, texture[0]);
-		gluBuild2DMipmaps(GL_TEXTURE_2D, GL_RGB, TextureImage[0]->sizeX, TextureImage[0]->sizeY,  GL_RGB, GL_UNSIGNED_BYTE, TextureImage[0]->data);//przypisawanie teksturze danych obrazowych
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);//filtrowanie liniowe
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);//filtrowanie liniowe
-	}
-	if (TextureImage[0])
-	{
-		if (TextureImage[0]->data)
+		if (TextureImage[i] = LoadBMP(tab[i]))
 		{
-			free(TextureImage[0]->data);//zwolnij pamiec tekstury obrazu
+			Status = true;
+			glGenTextures(3, &texture[i]);
+			glBindTexture(GL_TEXTURE_2D, texture[i]);
+			gluBuild2DMipmaps(GL_TEXTURE_2D, GL_RGB, TextureImage[i]->sizeX, TextureImage[i]->sizeY, GL_RGB, GL_UNSIGNED_BYTE, TextureImage[i]->data);//przypisawanie teksturze danych obrazowych
+			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);//filtrowanie liniowe
+			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);//filtrowanie liniowe
 		}
-		free(TextureImage[0]);//zwolnij pamiec struktury obrazu
+		if (TextureImage[i])
+		{
+			if (TextureImage[i]->data)
+			{
+				free(TextureImage[i]->data);//zwolnij pamiec tekstury obrazu
+			}
+			free(TextureImage[i]);//zwolnij pamiec struktury obrazu
+		}
 	}
 	return Status;
 }
@@ -53,9 +60,10 @@ int InitGL(GLvoid)                              // All Setup For OpenGL Goes Her
 		return FALSE;                           // If Texture Didn't Load Return FALSE ( NEW )
 	}
 	
+	quadric = gluNewQuadric();
 	glEnable(GL_TEXTURE_2D);                        // Enable Texture Mapping ( NEW )
 	glShadeModel(GL_SMOOTH);                        // Enable Smooth Shading
-	glClearColor(0.0f, 0.0f, 0.0f, 0.5f);                   // Black Background
+	glClearColor(0.0f, 0.0f, 0.0f, 0.0f);                   // Black Background
 	glClearDepth(1.0f);                         // Depth Buffer Setup
 	glEnable(GL_DEPTH_TEST);                        // Enables Depth Testing
 	glDepthFunc(GL_LEQUAL);                         // The Type Of Depth Testing To Do
@@ -64,11 +72,8 @@ int InitGL(GLvoid)                              // All Setup For OpenGL Goes Her
 	glEnable(GL_FOG);
 	setFog();
 
-	glLightfv(GL_LIGHT1, GL_AMBIENT, LightAmbient);
-	glLightfv(GL_LIGHT1, GL_DIFFUSE, LightDiffuse);
-	glLightfv(GL_LIGHT1, GL_POSITION, LightPosition);
-	glEnable(GL_LIGHT1);
-	//glEnable(GL_LIGHTING);
+	
+	
 	
 	return TRUE;                                // Initialization Went OK
 }
@@ -113,11 +118,13 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam)
 		break;
 	case WM_KEYDOWN:
 		keys[wParam] = TRUE;
+		if (wParam == VK_ESCAPE)
+			PostQuitMessage(0);
 		break;
 	case WM_KEYUP:
 		keys[wParam] = FALSE;
 		break;
-	case WM_DESTROY:PostQuitMessage(0);
+	case WM_DESTROY:PostQuitMessage(0);		gluDeleteQuadric(quadric);
 		break;
 	}
 	return DefWindowProc(hwnd, message, wParam, lParam);
@@ -128,13 +135,16 @@ int DrawGLScene(GLvoid)
 {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);//wyzerowanie bufora kolorow i glebokosci	
 	glLoadIdentity();
-
+	
 	glRotatef(5, 1, 0, 0);
 	glTranslatef(-40, -20, -500);
-
-	glBindTexture(GL_TEXTURE_2D, texture[0]);
-	
-	rysuj();
+	if (keys['C'])
+	{	
+		GLuint txt = texture[1];
+		texture[1] = texture[2];
+		texture[2] = txt;
+	}
+	rysuj(quadric);
 	return 1;
 }
 

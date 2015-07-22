@@ -77,6 +77,8 @@
   <ItemGroup>
     <Image Include="pliki\ikona.ico" />
     <Image Include="pliki\tex.bmp" />
+    <Image Include="pliki\tex2.bmp" />
+    <Image Include="pliki\tex3.bmp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

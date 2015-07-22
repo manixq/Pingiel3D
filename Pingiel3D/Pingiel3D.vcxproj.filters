@@ -42,5 +42,11 @@
     <Image Include="pliki\tex.bmp">
       <Filter>Resource Files</Filter>
     </Image>
+    <Image Include="pliki\tex2.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="pliki\tex3.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
   </ItemGroup>
 </Project>

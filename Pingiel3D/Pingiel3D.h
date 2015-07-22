@@ -13,8 +13,11 @@
 #pragma comment(lib,"glu32.lib")
 #pragma comment(lib,"glaux.lib")
 
+GLuint* wyslij();
+
 bool keys[];
-void rysuj();
+void rysuj(GLUquadricObj *quadric);
 void setFog();
 void plansza();
 void gracz(int x, int y, int z);
+void ball(GLUquadricObj *quadric,double x, double y, double z, int r);
